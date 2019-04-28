@@ -6,7 +6,7 @@ package com.example.contactapp20;
  * @author hermesmimini
  */
 public interface DataAccessService {
-	public AddressBook readAllData();
-	public void writeAllData(AddressBook theList);
+	public AddressBook readAllData(String filename);
+	public void writeAllData(AddressBook theList, String filename);
 	
 }

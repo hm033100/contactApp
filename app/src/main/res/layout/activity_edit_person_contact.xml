@@ -121,5 +121,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Delete Contact" />
+        <Button
+            android:id="@+id/btn_call"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Call" />
+
+        <Button
+            android:id="@+id/btn_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Text" />
+        <Button
+            android:id="@+id/btn_navigate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Navigate" />
+        <Button
+            android:id="@+id/btn_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email" />
     </LinearLayout>
 </ScrollView>

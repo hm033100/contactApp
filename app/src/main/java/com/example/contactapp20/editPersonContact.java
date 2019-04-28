@@ -1,6 +1,7 @@
 package com.example.contactapp20;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,7 +11,7 @@ import android.widget.EditText;
 
 public class editPersonContact extends AppCompatActivity {
 
-    Button btn_addPersonContact, btn_delete;
+    Button btn_addPersonContact, btn_delete, btn_call, btn_email, btn_navigate, btn_text;
     EditText txt_fName, txt_lName, txt_streetAddress, txt_city, txt_state, txt_zipCode, txt_country,
             txt_phoneNumber, txt_email, txt_birthdate, txt_nickname, txt_memo;
 
@@ -25,6 +26,10 @@ public class editPersonContact extends AppCompatActivity {
 
         btn_addPersonContact = findViewById(R.id.btn_addPersonContact);
         btn_delete = findViewById(R.id.btn_delete);
+        btn_call = findViewById(R.id.btn_call);
+        btn_email = findViewById(R.id.btn_email);
+        btn_navigate = findViewById(R.id.btn_navigate);
+        btn_text = findViewById(R.id.btn_text);
         txt_fName = findViewById(R.id.txt_fName);
         txt_lName = findViewById(R.id.txt_lName);
         txt_streetAddress = findViewById(R.id.txt_streetAddress);
@@ -75,6 +80,36 @@ public class editPersonContact extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent i = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(i);
+                }
+            });
+
+            btn_email.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String [] addresses = new String[1];
+                    addresses[0] = txt_email.getText().toString();
+                    composeEmail(addresses, "Hello from Hermes");
+                }
+            });
+            btn_call.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialPhoneNumber(txt_phoneNumber.getText().toString());
+                }
+            });
+            btn_text.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    composeMmsMessage(txt_phoneNumber.getText().toString(), "Suuhhh dude");
+                }
+            });
+
+            btn_navigate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String mapsQuery = "geo:0,0?q=" + txt_streetAddress.getText().toString();
+                    Uri mapuri = Uri.parse((mapsQuery));
+                    showMap(mapuri);
                 }
             });
 
@@ -152,5 +187,38 @@ public class editPersonContact extends AppCompatActivity {
 
         }
 
+    }
+
+    public void composeEmail(String[] addresses, String subject) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_EMAIL, addresses);
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+    public void dialPhoneNumber(String phoneNumber) {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + phoneNumber));
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+    public void composeMmsMessage(String phoneNumber, String message) {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("smsto:" + phoneNumber));  // This ensures only SMS apps respond
+        intent.putExtra("sms_body", message);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+    }
+
+    public void showMap(Uri geoLocation) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(geoLocation);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
     }
 }
